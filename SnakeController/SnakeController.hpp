@@ -43,7 +43,7 @@ private:
         int y;
         int ttl;
     };
-    bool requestedFoodCollidedWithSnake(const std::list<Segment>& segments, std::unique_ptr<Event> e);
+    bool requestedFoodCollidedWithSnake(const std::list<Segment>& segments, std::unique_ptr<Event>& e);
 
     IPort& m_displayPort;
     IPort& m_foodPort;
