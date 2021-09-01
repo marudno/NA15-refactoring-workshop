@@ -12,6 +12,8 @@ class IPort;
 
 namespace Snake
 {
+struct Segment;
+
 struct ConfigurationError : std::logic_error
 {
     ConfigurationError();
@@ -31,7 +33,9 @@ public:
     Controller& operator=(Controller const& p_rhs) = delete;
 
     void receive(std::unique_ptr<Event> e) override;
-
+    // void scorePortSend(Snake::Segment& newHead, bool& lost, std::list<Segment>& segments);
+    
+    //bool requestedFoodCollidedWithSnake(const std::list<Segment>& segments);
 private:
     struct Segment
     {
@@ -39,6 +43,7 @@ private:
         int y;
         int ttl;
     };
+    bool requestedFoodCollidedWithSnake(const std::list<Segment>& segments, std::unique_ptr<Event> e);
 
     IPort& m_displayPort;
     IPort& m_foodPort;
