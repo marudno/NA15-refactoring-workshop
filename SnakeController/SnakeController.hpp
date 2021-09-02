@@ -10,7 +10,6 @@
 class Event;
 class IPort;
 
-
 namespace Snake
 {
 struct Segment
@@ -19,16 +18,38 @@ struct Segment
     int y;
     int ttl;
 };
-struct SegmentsOfSnake
+
+class SegmentsOfSnake
 {
-    Direction getCurrentDirection();
-    std::list<Segment> getSegmentList();
+public:
+    Direction& getCurrentDirection();
+    std::list<Segment>& getSegmentsList();
+    void pushBackSegment(const Segment& seg);
+    void pushFrontSegment(const Segment& seg);
+    void setCurrentDirection(const Direction& newDirection);
+    void cleanNotExistingSnakeSegments();
+    bool doesCollideWithSnake(const Segment& newSegment) const;
+    Segment getNewHead() const;
 private:
     Direction m_currentDirection;
     std::list<Segment> m_segments;
-    Segment getNewHead() const;
-    void cleanNotExistingSnakeSegments(SegmentsOfSnake segmentsOfSnake);
 };
+
+class Board
+{
+public:
+
+    std::pair<int, int>& getFoodPosition();
+    std::pair<int, int>& getMapDimension();
+    void setMapDimension(int width, int height);
+    void setFoodPosition(int x, int y);
+    bool doesCollideWithWall(const Segment& newSegment);
+    bool doesCollideWithFood(const Segment& newSegment);
+private:
+    std::pair<int, int> m_mapDimension;
+    std::pair<int, int> m_foodPosition;
+};
+
 struct ConfigurationError : std::logic_error
 {
     ConfigurationError();
@@ -42,23 +63,18 @@ struct UnexpectedEventException : std::runtime_error
 class Controller : public IEventHandler
 {
 public:
-    Controller(IPort& p_displayPort, IPort& p_foodPort, IPort& p_scorePort, std::string const& p_config);
+    Controller(IPort& p_displayPort, IPort& p_foodPort, IPort& p_scorePort, std::string const& p_config, SegmentsOfSnake& segmentsOfSnake, Board& board);
 
     Controller(Controller const& p_rhs) = delete;
     Controller& operator=(Controller const& p_rhs) = delete;
 
     void receive(std::unique_ptr<Event> e) override;
-
 private:
     void handleTimePassed(const TimeoutInd&);
     void handleDirectionChange(const DirectionInd&);
     void handleFoodPositionChange(const FoodInd& receivedFood);
     void handleNewFood(const FoodResp& requestedFood);
     void pause(std::unique_ptr<Event> e);
-
-    bool doesCollideWithSnake(const Segment& newSegment) const;
-    bool doesCollideWithWall(const Segment& newSegment) const;
-    bool doesCollideWithFood(const Segment& newSegment) const;
 
     void notifyAboutFailure();
     void repaintTile(const Segment& position, Cell type);
@@ -68,8 +84,8 @@ private:
     IPort& m_foodPort;
     IPort& m_scorePort;
 
-    std::pair<int, int> m_mapDimension;
-    std::pair<int, int> m_foodPosition;
+    SegmentsOfSnake m_segmentsOfSnake;
+    Board m_board;
 };
 
 } // namespace Snake
