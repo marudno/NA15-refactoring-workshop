@@ -19,10 +19,12 @@ struct SnakeTest : Test
     StrictMock<PortMock> displayPortMock;
     StrictMock<PortMock> foodPortMock;
     StrictMock<PortMock> scorePortMock;
+    Board board;
+    SegmentsOfSnake segmentsOfSnake;
 
     void configureSUT(std::string p_config)
     {
-        sut = std::make_unique<Controller>(displayPortMock, foodPortMock, scorePortMock, p_config);
+        sut = std::make_unique<Controller>(displayPortMock, foodPortMock, scorePortMock, p_config, segmentsOfSnake, board);
     }
 
     std::unique_ptr<Controller> sut = nullptr;
