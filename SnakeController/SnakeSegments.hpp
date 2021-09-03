@@ -13,6 +13,11 @@ class Segments
     {
         int x, y;
     };
+
+    struct Dimension
+    {
+        int width, height;
+    };    
 public:
     Segments(Direction direction);
 

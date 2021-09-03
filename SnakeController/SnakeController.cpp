@@ -87,8 +87,8 @@ void Controller::sendClearOldFood()
     auto foodPosition = m_world->getFoodPosition();
 
     DisplayInd clearOldFood;
-    clearOldFood.position.x = foodPosition.first;
-    clearOldFood.position.y = foodPosition.second;
+    clearOldFood.position.x = foodPosition.x;
+    clearOldFood.position.y = foodPosition.y;
     clearOldFood.value = Cell_FREE;
 
     m_displayPort.send(std::make_unique<EventT<DisplayInd>>(clearOldFood));
@@ -120,7 +120,7 @@ void Controller::addHeadSegment(Position pos)
 
 void Controller::removeTailSegmentIfNotScored(Position pos)
 {
-    if (std::make_pair(pos.x, pos.y) == m_world->getFoodPosition()) {
+    if (pos == m_world->getFoodPosition()) {
         m_scorePort.send(std::make_unique<EventT<ScoreInd>>());
         m_foodPort.send(std::make_unique<EventT<FoodReq>>());
     } else {
@@ -141,7 +141,7 @@ void Controller::updateSegmentsIfSuccessfullMove(Position pos)
 void Controller::handleTimeoutInd()
 {
     auto newHead = m_segments->nextHead();
-    updateSegmentsIfSuccessfullMove(newHead.first, newHead.second);
+    updateSegmentsIfSuccessfullMove(newHead.position);
 }
 
 void Controller::handleDirectionInd(std::unique_ptr<Event> e)
