@@ -34,7 +34,7 @@ Controller::Controller(IPort& p_displayPort, IPort& p_foodPort, IPort& p_scorePo
     istr >> w >> width >> height >> f >> foodX >> foodY >> s;
 
     if (w == 'W' and f == 'F' and s == 'S') {
-        m_world = std::make_unique<World>(std::make_pair(width, height), std::make_pair(foodX, foodY));
+        m_world = std::make_unique<World>(Segments::Dimension{width, height}, Position{foodX, foodY});
 
         Direction startDirection;
         istr >> d;
@@ -99,8 +99,8 @@ void Controller::removeTailSegment()
     auto tail = m_segments->removeTail();
 
     DisplayInd clearTail;
-    clearTail.position.x = tail.first;
-    clearTail.position.y = tail.second;
+    clearTail.position.x = tail.x;
+    clearTail.position.y = tail.y;
     clearTail.value = Cell_FREE;
 
     m_displayPort.send(std::make_unique<EventT<DisplayInd>>(clearTail));
@@ -133,15 +133,15 @@ void Controller::updateSegmentsIfSuccessfullMove(Position pos)
     if (m_segments->isCollision(pos.x, pos.y) or not m_world->contains(pos.x, pos.y)) {
         m_scorePort.send(std::make_unique<EventT<LooseInd>>());
     } else {
-        addHeadSegment(pos;
+        addHeadSegment(pos);
         removeTailSegmentIfNotScored(pos);
     }
 }
 
 void Controller::handleTimeoutInd()
 {
-    auto newHead = m_segments->nextHead();
-    updateSegmentsIfSuccessfullMove(newHead.position);
+    Position newHead = m_segments->nextHead();
+    updateSegmentsIfSuccessfullMove(newHead);
 }
 
 void Controller::handleDirectionInd(std::unique_ptr<Event> e)

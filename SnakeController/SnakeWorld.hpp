@@ -1,5 +1,6 @@
 #pragma once
 #include "SnakePosition.hpp"
+#include "SnakeSegments.hpp"
 #include <utility>
 
 namespace Snake
@@ -8,7 +9,7 @@ namespace Snake
 class World
 {
 public:
-    World(Dimension dimension, Position food);
+    World(Segments::Dimension dimension, Position food);
 
     void setFoodPosition(Position& pos);
     Position getFoodPosition() const;
@@ -17,7 +18,7 @@ public:
 
 private:
     Position m_foodPosition;
-    Position m_dimension;
+    Segments::Dimension m_dimension;
 };
 
 } // namespace Snake

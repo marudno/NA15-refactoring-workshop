@@ -1,9 +1,10 @@
 #include "SnakeWorld.hpp"
+#include "SnakeSegments.hpp"
 
 namespace Snake
 {
 
-World::World(Dimension dimension, Position food)
+World::World(Segments::Dimension dimension, Position food)
     : m_foodPosition(food),
       m_dimension(dimension)
 {}
@@ -20,7 +21,7 @@ Position World::getFoodPosition() const
 
 bool World::contains(int x, int y) const
 {
-    return x >= 0 and x < m_dimension.width and y >= 0 and y < m_dimension.second;
+    return x >= 0 and x < m_dimension.width and y >= 0 and y < m_dimension.height;
 }
 
 } // namespace Snake
