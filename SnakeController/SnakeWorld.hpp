@@ -8,16 +8,16 @@ namespace Snake
 class World
 {
 public:
-    World(std::pair<int, int> dimension, std::pair<int, int> food);
+    World(Position dimension, Position food);
 
-    void setFoodPosition(std::pair<int, int> position);
-    std::pair<int, int> getFoodPosition() const;
+    void setFoodPosition(Position& pos);
+    Position getFoodPosition() const;
 
     bool contains(int x, int y) const;
 
 private:
-    std::pair<int, int> m_foodPosition;
-    std::pair<int, int> m_dimension;
+    Position m_foodPosition;
+    Position m_dimension;
 };
 
 } // namespace Snake

@@ -22,6 +22,7 @@ public:
     std::pair<int, int> nextHead() const;
     std::pair<int, int> removeTail();
     void updateDirection(Direction newDirection);
+    Position getPosition();
 private:
     Direction m_headDirection;
     std::list<Position> m_segments;

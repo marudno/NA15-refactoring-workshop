@@ -51,14 +51,14 @@ private:
     void handleFoodResp(std::unique_ptr<Event>);
     void handlePauseInd(std::unique_ptr<Event>);
 
-    void updateSegmentsIfSuccessfullMove(int x, int y);
-    void addHeadSegment(int x, int y);
-    void removeTailSegmentIfNotScored(int x, int y);
+    void updateSegmentsIfSuccessfullMove(Position pos);
+    void addHeadSegment(Position pos);
+    void removeTailSegmentIfNotScored(Position pos);
     void removeTailSegment();
 
-    void updateFoodPosition(int x, int y, std::function<void()> clearPolicy);
+    void updateFoodPosition(Position newPos, std::function<void()> clearPolicy);
     void sendClearOldFood();
-    void sendPlaceNewFood(int x, int y);
+    void sendPlaceNewFood(Position pos);
 
     bool m_paused;
 };
